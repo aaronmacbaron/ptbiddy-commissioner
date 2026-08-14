@@ -1,0 +1,40 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+import { site, nav } from "../config/site";
+---
+
+<Layout
+  title="Page Not Found"
+  description="That page doesn't exist. Call Peggy directly or head back to the homepage."
+>
+  <section class="container-page py-24 text-center md:py-32">
+    <p class="font-display text-6xl text-brass-400">404</p>
+    <h1 class="mt-4 text-3xl md:text-4xl">That page isn't here.</h1>
+    <p class="mx-auto mt-4 max-w-md leading-relaxed text-ink-600">
+      The link may be out of date. Everything on the site is one tap away below — or
+      just call, which is faster anyway.
+    </p>
+
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-full border border-ink-200 bg-white px-5 py-2.5 text-sm font-medium text-ink-800 hover:border-brass-400"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <a
+      href={`tel:${site.phoneHref}`}
+      class="mt-8 inline-flex items-center gap-2.5 rounded-full bg-ink-900 px-7 py-3.5 text-base font-semibold text-white hover:bg-ink-800"
+    >
+      <Icon name="phone" class="size-5 text-brass-300" />
+      {site.phone}
+    </a>
+  </section>
+</Layout>

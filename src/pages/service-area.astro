@@ -1,0 +1,128 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CtaBand from "../components/CtaBand.astro";
+import Icon from "../components/Icon.astro";
+import { site, pricing } from "../config/site";
+import { areas, facilities } from "../config/content";
+---
+
+<Layout
+  title="Service Area"
+  description={`Mobile Commissioner for Oaths covering all of Calgary — NW, NE, SW, SE and downtown — plus Airdrie, Chestermere, Cochrane, Okotoks and Strathmore. Hospital and care-home visits available.`}
+>
+  <PageHero
+    eyebrow="Service area"
+    title="Across Calgary, and out to the towns that ring it."
+    lead={`Peggy travels to clients throughout Calgary and up to roughly ${site.serviceRadiusKm} km beyond it. Travel within ${pricing.travelIncludedKm} km of downtown is included in the base fee; anything further is quoted before she sets out.`}
+  >
+    <Breadcrumbs
+      slot="breadcrumbs"
+      trail={[{ label: "Home", href: "/" }, { label: "Service Area" }]}
+    />
+  </PageHero>
+
+  <section class="container-page py-16 md:py-20">
+    <h2 class="text-3xl md:text-4xl">Neighbourhoods &amp; communities</h2>
+    <p class="mt-4 max-w-2xl leading-relaxed text-ink-600">
+      This list isn't exhaustive — if you're in the Calgary area and you're not sure
+      whether you're in range, just ask. The answer is usually yes.
+    </p>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        areas.map((a) => (
+          <li class="rounded-2xl border border-ink-100 bg-white p-6">
+            <span class="flex items-center gap-2.5 text-brass-600">
+              <Icon name="pin" class="size-5" />
+              <h3 class="text-lg text-ink-900">{a.name}</h3>
+            </span>
+            <p class="mt-2.5 text-sm leading-relaxed text-ink-600">{a.note}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="border-y border-ink-100 bg-parchment/60 py-20">
+    <div class="container-page grid gap-12 lg:grid-cols-2">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brass-600">
+          Bedside &amp; facility visits
+        </p>
+        <h2 class="mt-3 text-3xl md:text-4xl">
+          When the signer can't come to the document.
+        </h2>
+        <p class="mt-5 leading-relaxed text-ink-600">
+          A good share of Peggy's work happens in hospital rooms and care residences,
+          often on short notice and often for families sorting out an estate or a
+          benefit claim under pressure. Tell her the facility and room number when you
+          book, along with anything she should know about the signer's condition.
+        </p>
+        <p class="mt-4 leading-relaxed text-ink-600">
+          One requirement doesn't bend, wherever the appointment happens: the signer
+          has to understand what they're swearing and do it freely. If Peggy can't
+          satisfy herself of that, she can't commission the document — and she'll
+          explain why rather than leave you guessing.
+        </p>
+      </div>
+
+      <ul class="grid gap-3 self-start sm:grid-cols-2 lg:grid-cols-1">
+        {
+          facilities.map((f) => (
+            <li class="flex items-center gap-3 rounded-xl border border-ink-200/70 bg-white px-5 py-4">
+              <Icon name="check" class="size-4 shrink-0 text-brass-500" />
+              <span class="text-sm font-medium text-ink-800">{f}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="container-page py-20">
+    <div class="grid gap-10 md:grid-cols-3">
+      <div class="rounded-2xl border border-ink-100 bg-white p-7">
+        <Icon name="clock" class="size-6 text-brass-600" />
+        <h2 class="mt-4 text-xl">Hours she actually keeps</h2>
+        <ul class="mt-4 space-y-2 text-sm">
+          {
+            site.hours.map((h) => (
+              <li class="flex justify-between gap-4 border-b border-ink-100 pb-2">
+                <span class="text-ink-600">{h.days}</span>
+                <span class="font-medium text-ink-900">{h.time}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-ink-100 bg-white p-7">
+        <Icon name="spark" class="size-6 text-brass-600" />
+        <h2 class="mt-4 text-xl">Urgent requests</h2>
+        <p class="mt-3 text-sm leading-relaxed text-ink-600">
+          Court filing deadline tomorrow? Flight on Friday and no consent letter?
+          Call rather than email — urgent same-day bookings get triaged by phone,
+          and hospital requests jump the queue where they can.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-ink-100 bg-white p-7">
+        <Icon name="car" class="size-6 text-brass-600" />
+        <h2 class="mt-4 text-xl">Outside the radius?</h2>
+        <p class="mt-3 text-sm leading-relaxed text-ink-600">
+          Longer trips are still possible at ${pricing.travelPerKm}/km beyond {
+            pricing.travelIncludedKm
+          } km. For anywhere outside Alberta, though, you'll need a commissioner or
+          notary in that province — Alberta appointments stop at the border.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="In Calgary or nearby? She can probably be there today."
+    body="Give Peggy your neighbourhood and the document you need sworn, and she'll confirm timing straight away."
+  />
+</Layout>

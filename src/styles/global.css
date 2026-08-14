@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink-50: #f4f6fa;
+  --color-ink-100: #e6ebf3;
+  --color-ink-200: #c9d4e5;
+  --color-ink-300: #9cafcd;
+  --color-ink-400: #6883ab;
+  --color-ink-500: #46618c;
+  --color-ink-600: #354c72;
+  --color-ink-700: #2b3d5c;
+  --color-ink-800: #1f2d44;
+  --color-ink-900: #162133;
+
+  --color-brass-50: #fdf8ed;
+  --color-brass-100: #f8ecd0;
+  --color-brass-200: #f0d79d;
+  --color-brass-300: #e5bc66;
+  --color-brass-400: #d9a13f;
+  --color-brass-500: #c88528;
+  --color-brass-600: #a86720;
+  --color-brass-700: #854c1e;
+  --color-brass-800: #6e3e1f;
+  --color-brass-900: #5d341d;
+
+  --color-cream: #fbf9f5;
+  --color-parchment: #f4f0e8;
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+    Georgia, ui-serif, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink-800);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    color: var(--color-ink-900);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brass-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 72rem;
+  padding-inline: 1.25rem;
+}
+
+/* Sticky mobile call bar occupies the bottom of small viewports. */
+@utility pb-callbar {
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+}

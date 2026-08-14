@@ -1,0 +1,27 @@
+---
+import { site } from "../config/site";
+import Icon from "./Icon.astro";
+---
+
+<!-- Persistent tap-to-call bar: the primary conversion path on phones. -->
+<div
+  class="fixed inset-x-0 bottom-0 z-50 border-t border-ink-100 bg-cream/95 backdrop-blur-md sm:hidden"
+  style="padding-bottom: env(safe-area-inset-bottom)"
+>
+  <div class="grid grid-cols-2 gap-2 p-2.5">
+    <a
+      href={`tel:${site.phoneHref}`}
+      class="flex items-center justify-center gap-2 rounded-xl bg-brass-500 py-3 text-sm font-semibold text-white"
+    >
+      <Icon name="phone" class="size-4" />
+      Call Peggy
+    </a>
+    <a
+      href="/contact/"
+      class="flex items-center justify-center gap-2 rounded-xl border border-ink-300 bg-white py-3 text-sm font-semibold text-ink-800"
+    >
+      <Icon name="clock" class="size-4" />
+      Book a visit
+    </a>
+  </div>
+</div>

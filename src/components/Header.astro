@@ -1,0 +1,180 @@
+---
+import { site, nav } from "../config/site";
+import { services } from "../config/services";
+import Icon from "./Icon.astro";
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+
+<header class="sticky top-0 z-40 border-b border-ink-100 bg-cream/90 backdrop-blur-md">
+  <div class="container-page flex h-16 items-center justify-between gap-4 md:h-20">
+    <a href="/" class="group flex items-center gap-3">
+      <span
+        class="grid size-10 place-items-center rounded-full bg-ink-800 font-display text-lg text-brass-300 transition-colors group-hover:bg-ink-900"
+        aria-hidden="true">P</span
+      >
+      <span class="leading-tight">
+        <span class="block font-display text-lg font-semibold text-ink-900 md:text-xl"
+          >{site.owner}</span
+        >
+        <span class="block text-[0.7rem] uppercase tracking-[0.16em] text-ink-500"
+          >Commissioner for Oaths</span
+        >
+      </span>
+    </a>
+
+    <nav aria-label="Main" class="hidden items-center gap-1 lg:flex">
+      {
+        nav.map((item) =>
+          item.href === "/services/" ? (
+            // Hover/focus dropdown — CSS only, so it works without JS.
+            <div class="group relative">
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class:list={[
+                  "flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  isActive(item.href)
+                    ? "bg-ink-100 text-ink-900"
+                    : "text-ink-600 hover:bg-ink-50 hover:text-ink-900",
+                ]}
+              >
+                {item.label}
+                <Icon
+                  name="chevron"
+                  class="size-3 rotate-90 text-ink-400 transition-transform group-hover:-rotate-90"
+                />
+              </a>
+
+              <div class="invisible absolute left-0 top-full z-50 pt-2 opacity-0 transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <ul class="w-72 rounded-2xl border border-ink-100 bg-white p-2 shadow-xl shadow-ink-900/10">
+                  {services.map((s) => (
+                    <li>
+                      <a
+                        href={`/services/${s.slug}/`}
+                        class:list={[
+                          "flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-ink-50",
+                          path.startsWith(`/services/${s.slug}`)
+                            ? "bg-ink-50"
+                            : "",
+                        ]}
+                      >
+                        <Icon name={s.icon} class="mt-0.5 size-4 shrink-0 text-brass-600" />
+                        <span class="text-sm font-medium text-ink-800">{s.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                  <li class="mt-1 border-t border-ink-100 pt-1">
+                    <a
+                      href="/services/"
+                      class="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold text-brass-700 hover:bg-ink-50"
+                    >
+                      All services &amp; fees
+                      <Icon name="chevron" class="size-3.5" />
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              class:list={[
+                "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                isActive(item.href)
+                  ? "bg-ink-100 text-ink-900"
+                  : "text-ink-600 hover:bg-ink-50 hover:text-ink-900",
+              ]}
+            >
+              {item.label}
+            </a>
+          ),
+        )
+      }
+    </nav>
+
+    <a
+      href={`tel:${site.phoneHref}`}
+      class="hidden items-center gap-2 rounded-full bg-brass-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brass-600 sm:inline-flex"
+    >
+      <Icon name="phone" class="size-4" />
+      {site.phone}
+    </a>
+
+    <button
+      type="button"
+      id="menu-toggle"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      class="grid size-10 place-items-center rounded-full border border-ink-200 text-ink-700 lg:hidden"
+    >
+      <span class="sr-only">Open menu</span>
+      <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <nav
+    id="mobile-nav"
+    aria-label="Mobile"
+    hidden
+    class="border-t border-ink-100 bg-cream lg:hidden"
+  >
+    <ul class="container-page py-2">
+      {
+        nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              class:list={[
+                "flex items-center justify-between border-b border-ink-100/70 py-3.5 text-base font-medium",
+                isActive(item.href) ? "text-brass-600" : "text-ink-700",
+                item.href === "/services/" ? "border-b-0 pb-2" : "last:border-0",
+              ]}
+            >
+              {item.label}
+              <Icon name="chevron" class="size-4 text-ink-300" />
+            </a>
+
+            {item.href === "/services/" && (
+              <ul class="mb-2 border-b border-ink-100/70 pb-3 pl-4">
+                {services.map((s) => (
+                  <li>
+                    <a
+                      href={`/services/${s.slug}/`}
+                      class:list={[
+                        "flex items-center gap-2.5 py-2 text-sm",
+                        path.startsWith(`/services/${s.slug}`)
+                          ? "font-semibold text-brass-600"
+                          : "text-ink-600",
+                      ]}
+                    >
+                      <Icon name={s.icon} class="size-4 shrink-0 text-brass-500" />
+                      {s.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-nav");
+
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    if (menu) menu.hidden = open;
+  });
+</script>

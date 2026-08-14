@@ -1,0 +1,304 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "../../layouts/Layout.astro";
+import Icon from "../../components/Icon.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import FaqList from "../../components/FaqList.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import { site, pricing } from "../../config/site";
+import { services, getService } from "../../config/services";
+
+export const getStaticPaths = (() =>
+  services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }))) satisfies GetStaticPaths;
+
+const { service } = Astro.props;
+
+const related = service.related
+  .map((slug) => getService(slug))
+  .filter((s) => s !== undefined);
+
+const url = new URL(`/services/${service.slug}/`, site.url).href;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: service.title,
+  description: service.metaDescription,
+  url,
+  serviceType: service.title,
+  provider: { "@id": `${site.url}#business` },
+  areaServed: { "@type": "City", name: site.city },
+  availableChannel: {
+    "@type": "ServiceChannel",
+    servicePhone: site.phone,
+    serviceLocation: {
+      "@type": "Place",
+      name: `Client's location across ${site.city}, ${site.region}`,
+    },
+  },
+  offers: {
+    "@type": "Offer",
+    priceCurrency: "CAD",
+    price: pricing.base,
+    description: `From $${pricing.base} for the first document within ${site.city}.`,
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Services",
+      item: new URL("/services/", site.url).href,
+    },
+    { "@type": "ListItem", position: 3, name: service.title, item: url },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: service.faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Layout
+  title={service.title}
+  description={service.metaDescription}
+  schema={[serviceSchema, breadcrumbSchema, faqSchema]}
+>
+  <!-- Hero -->
+  <section class="border-b border-ink-100 bg-parchment">
+    <div class="container-page py-10 md:py-14">
+      <Breadcrumbs
+        trail={[
+          { label: "Home", href: "/" },
+          { label: "Services", href: "/services/" },
+          { label: service.title },
+        ]}
+      />
+
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-start">
+        <div>
+          <span class="grid size-12 place-items-center rounded-xl bg-ink-900 text-brass-300">
+            <Icon name={service.icon} class="size-6" />
+          </span>
+          <h1 class="mt-6 max-w-2xl text-4xl leading-[1.1] md:text-5xl">
+            {service.heading}
+          </h1>
+          <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink-600">
+            {service.blurb}
+          </p>
+
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={`tel:${site.phoneHref}`}
+              class="inline-flex items-center justify-center gap-2.5 rounded-full bg-ink-900 px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-ink-800"
+            >
+              <Icon name="phone" class="size-5 text-brass-300" />
+              <span class="whitespace-nowrap">Call or text {site.phone}</span>
+            </a>
+            <a
+              href="/contact/"
+              class="inline-flex items-center justify-center gap-2.5 rounded-full border border-ink-300 bg-white px-7 py-3.5 text-base font-semibold text-ink-800 transition-colors hover:border-ink-400"
+            >
+              Request an appointment
+            </a>
+          </div>
+        </div>
+
+        <!-- At-a-glance card -->
+        <aside class="rounded-2xl border border-ink-200/70 bg-white p-7">
+          <h2 class="text-xs font-semibold uppercase tracking-[0.18em] text-brass-600">
+            At a glance
+          </h2>
+          <dl class="mt-5 space-y-4 text-sm">
+            <div class="flex justify-between gap-4 border-b border-ink-100 pb-3">
+              <dt class="text-ink-500">Typical appointment</dt>
+              <dd class="font-semibold text-ink-900">10–15 min</dd>
+            </div>
+            <div class="flex justify-between gap-4 border-b border-ink-100 pb-3">
+              <dt class="text-ink-500">From</dt>
+              <dd class="font-semibold text-ink-900">${pricing.base}</dd>
+            </div>
+            <div class="flex justify-between gap-4 border-b border-ink-100 pb-3">
+              <dt class="text-ink-500">Each extra document</dt>
+              <dd class="font-semibold text-ink-900">${pricing.perExtraDoc}</dd>
+            </div>
+            <div class="flex justify-between gap-4">
+              <dt class="text-ink-500">Where</dt>
+              <dd class="font-semibold text-ink-900">Your location</dd>
+            </div>
+          </dl>
+          <a
+            href="/services/#fees"
+            class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-ink-800 underline underline-offset-4 hover:text-brass-700"
+          >
+            Full fee schedule
+            <Icon name="chevron" class="size-3.5" />
+          </a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Body -->
+  <section class="container-page py-16 md:py-20">
+    <div class="grid gap-14 lg:grid-cols-[1.35fr_1fr] lg:items-start">
+      <div>
+        <div class="max-w-2xl space-y-5 text-lg leading-relaxed text-ink-600">
+          {service.intro.map((para) => <p>{para}</p>)}
+        </div>
+
+        <h2 class="mt-14 text-2xl md:text-3xl">You probably need this if…</h2>
+        <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+          {
+            service.signals.map((signal) => (
+              <li class="flex gap-3 rounded-xl border border-ink-100 bg-white p-4 text-sm leading-relaxed text-ink-700">
+                <Icon name="check" class="mt-0.5 size-4 shrink-0 text-brass-500" />
+                {signal}
+              </li>
+            ))
+          }
+        </ul>
+
+        <h2 class="mt-14 text-2xl md:text-3xl">How to prepare</h2>
+        <p class="mt-4 max-w-2xl leading-relaxed text-ink-600">
+          Every appointment needs the same three things — valid government photo ID,
+          your document filled in, and an unsigned signature line. For this service,
+          add the following:
+        </p>
+        <ol class="mt-6 space-y-4">
+          {
+            service.prepare.map((item, i) => (
+              <li class="flex gap-4">
+                <span class="grid size-7 shrink-0 place-items-center rounded-full bg-brass-50 font-display text-sm font-semibold text-brass-700">
+                  {i + 1}
+                </span>
+                <span class="leading-relaxed text-ink-700">{item}</span>
+              </li>
+            ))
+          }
+        </ol>
+
+        {
+          service.caution && (
+            <div class="mt-10 rounded-2xl border border-brass-200 bg-brass-50/60 p-6">
+              <span class="flex items-center gap-2.5 text-brass-700">
+                <Icon name="shield" class="size-5" />
+                <span class="text-xs font-semibold uppercase tracking-[0.14em]">
+                  Worth knowing
+                </span>
+              </span>
+              <p class="mt-3 leading-relaxed text-ink-700">{service.caution}</p>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Sidebar: what's covered -->
+      <aside class="lg:sticky lg:top-28">
+        <div class="rounded-2xl border border-ink-100 bg-white p-7">
+          <h2 class="text-xl">Commonly includes</h2>
+          <ul class="mt-5 space-y-2.5 text-sm text-ink-700">
+            {
+              service.examples.map((ex) => (
+                <li class="flex gap-2.5">
+                  <Icon name="check" class="mt-1 size-3.5 shrink-0 text-brass-500" />
+                  {ex}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-6 border-t border-ink-100 pt-5 text-sm leading-relaxed text-ink-500">
+            Don't see yours? It's very likely still covered — call and describe the
+            form.
+          </p>
+          <a
+            href={`tel:${site.phoneHref}`}
+            class="mt-5 flex items-center justify-center gap-2.5 rounded-full bg-brass-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brass-600"
+          >
+            <Icon name="phone" class="size-4" />
+            {site.phone}
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Service-specific FAQ -->
+  <section class="border-y border-ink-100 bg-parchment/60 py-16 md:py-20">
+    <div class="container-page">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brass-600">
+        {service.title}
+      </p>
+      <h2 class="mt-3 text-3xl md:text-4xl">Questions about this specifically</h2>
+      <div class="mt-10">
+        <FaqList items={service.faqs} />
+      </div>
+      <a
+        href="/faq/"
+        class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-ink-800 underline underline-offset-4 hover:text-brass-700"
+      >
+        General questions about commissioning
+        <Icon name="chevron" class="size-4" />
+      </a>
+    </div>
+  </section>
+
+  <!-- Related -->
+  <section class="container-page py-16 md:py-20">
+    <h2 class="text-2xl md:text-3xl">Often needed alongside this</h2>
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        related.map((r) => (
+          <a
+            href={`/services/${r.slug}/`}
+            class="group flex flex-col rounded-2xl border border-ink-100 bg-white p-7 transition-shadow hover:shadow-lg hover:shadow-ink-900/5"
+          >
+            <span class="text-brass-600">
+              <Icon name={r.icon} class="size-7" />
+            </span>
+            <h3 class="mt-4 text-xl group-hover:text-brass-700">{r.title}</h3>
+            <p class="mt-2.5 flex-1 text-sm leading-relaxed text-ink-600">{r.blurb}</p>
+            <span class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-ink-800">
+              Read more
+              <Icon name="chevron" class="size-3.5" />
+            </span>
+          </a>
+        ))
+      }
+      <a
+        href="/services/"
+        class="group flex flex-col justify-between rounded-2xl border border-dashed border-ink-300 p-7 transition-colors hover:border-brass-400"
+      >
+        <div>
+          <h3 class="text-xl group-hover:text-brass-700">All services</h3>
+          <p class="mt-2.5 text-sm leading-relaxed text-ink-600">
+            Every document type Peggy commissions, plus the published fee schedule.
+          </p>
+        </div>
+        <span class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-ink-800">
+          Browse all
+          <Icon name="chevron" class="size-3.5" />
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <CtaBand
+    heading={`Need ${service.title.toLowerCase()} handled?`}
+    body={`Tell Peggy the document and your postal code, and she'll confirm she's the right person for it — then give you the first available window.`}
+  />
+</Layout>

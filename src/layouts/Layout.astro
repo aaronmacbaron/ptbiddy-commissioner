@@ -1,0 +1,118 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CallBar from "../components/CallBar.astro";
+import { site } from "../config/site";
+import { areas } from "../config/content";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Extra JSON-LD blocks (FAQPage, BreadcrumbList…) for this page. */
+  schema?: unknown[];
+}
+
+const { title, description, schema = [] } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const fullTitle = `${title} | ${site.name} — ${site.city}, ${site.region}`;
+
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LegalService",
+  "@id": `${site.url}#business`,
+  name: site.legalName,
+  description: site.tagline,
+  url: site.url,
+  telephone: site.phone,
+  email: site.email,
+  priceRange: "$$",
+  founder: { "@type": "Person", name: site.ownerFull },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: site.city,
+    addressRegion: site.region,
+    addressCountry: site.country,
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: site.geo.lat,
+    longitude: site.geo.lng,
+  },
+  areaServed: areas.map((a) => ({ "@type": "Place", name: a.name })),
+  serviceArea: {
+    "@type": "GeoCircle",
+    geoMidpoint: {
+      "@type": "GeoCoordinates",
+      latitude: site.geo.lat,
+      longitude: site.geo.lng,
+    },
+    geoRadius: site.serviceRadiusKm * 1000,
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "08:00",
+      closes: "20:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Saturday"],
+      opens: "09:00",
+      closes: "18:00",
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#fbf9f5" />
+    <meta name="geo.region" content="CA-AB" />
+    <meta name="geo.placename" content={site.city} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_CA" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(businessSchema)}
+    />
+    {
+      schema.map((block) => (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(block)} />
+      ))
+    }
+  </head>
+
+  <body class="pb-callbar sm:pb-0">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-ink-900 focus:px-4 focus:py-2 focus:text-white"
+      >Skip to content</a
+    >
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <CallBar />
+  </body>
+</html>

@@ -1,0 +1,268 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Icon from "../components/Icon.astro";
+import { site } from "../config/site";
+import { services } from "../config/services";
+
+const hasEndpoint = site.formEndpoint.length > 0;
+---
+
+<Layout
+  title="Book an Appointment"
+  description={`Book a mobile Commissioner for Oaths in Calgary. Call or text ${site.phone}, or send an appointment request — evenings, weekends and same-day visits available.`}
+>
+  <PageHero
+    eyebrow="Book a visit"
+    title="Call, text, or send the details — whichever is easier."
+    lead="For anything urgent, phone. Peggy answers her own line, and you'll know within a minute whether she can help and when she can be there."
+  >
+    <Breadcrumbs
+      slot="breadcrumbs"
+      trail={[{ label: "Home", href: "/" }, { label: "Contact" }]}
+    />
+  </PageHero>
+
+  <section class="container-page py-16 md:py-20">
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.15fr]">
+      <!-- Direct contact -->
+      <div>
+        <h2 class="text-2xl">Fastest ways to reach her</h2>
+
+        <div class="mt-6 space-y-4">
+          <a
+            href={`tel:${site.phoneHref}`}
+            class="flex items-start gap-4 rounded-2xl border border-ink-200/70 bg-white p-6 transition-colors hover:border-brass-400"
+          >
+            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-brass-500 text-white">
+              <Icon name="phone" class="size-5" />
+            </span>
+            <span>
+              <span class="block font-display text-xl text-ink-900">{site.phone}</span>
+              <span class="mt-1 block text-sm text-ink-500"
+                >Call or text — texts are fine for booking.</span
+              >
+            </span>
+          </a>
+
+          <a
+            href={`mailto:${site.email}`}
+            class="flex items-start gap-4 rounded-2xl border border-ink-200/70 bg-white p-6 transition-colors hover:border-brass-400"
+          >
+            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-ink-800 text-brass-300">
+              <Icon name="mail" class="size-5" />
+            </span>
+            <span>
+              <span class="block font-semibold text-ink-900">{site.email}</span>
+              <span class="mt-1 block text-sm text-ink-500"
+                >Replies within a few hours during business days.</span
+              >
+            </span>
+          </a>
+        </div>
+
+        <h3 class="mt-10 text-xs font-semibold uppercase tracking-[0.18em] text-brass-600">
+          Hours
+        </h3>
+        <ul class="mt-4 space-y-2 text-sm">
+          {
+            site.hours.map((h) => (
+              <li class="flex justify-between gap-4 border-b border-ink-100 pb-2">
+                <span class="text-ink-600">{h.days}</span>
+                <span class="font-medium text-ink-900">{h.time}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="mt-10 rounded-2xl bg-ink-900 p-7 text-ink-200">
+          <h3 class="font-display text-xl text-white">Before the appointment</h3>
+          <ul class="mt-4 space-y-3 text-sm leading-relaxed">
+            <li class="flex gap-3">
+              <Icon name="check" class="mt-1 size-4 shrink-0 text-brass-300" />
+              Bring valid, unexpired government photo ID.
+            </li>
+            <li class="flex gap-3">
+              <Icon name="check" class="mt-1 size-4 shrink-0 text-brass-300" />
+              Fill in every blank on the document except signature and date.
+            </li>
+            <li class="flex gap-3">
+              <Icon name="check" class="mt-1 size-4 shrink-0 text-brass-300" />
+              <span>Do <strong class="text-white">not</strong> sign it beforehand.</span>
+            </li>
+            <li class="flex gap-3">
+              <Icon name="check" class="mt-1 size-4 shrink-0 text-brass-300" />
+              If the document names other signers, have them there too.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Request form -->
+      <div class="rounded-3xl border border-ink-200/70 bg-white p-8 md:p-10">
+        <h2 class="text-2xl">Request an appointment</h2>
+        <p class="mt-2 text-sm leading-relaxed text-ink-500">
+          Peggy replies to every request. For same-day or urgent needs, please phone
+          instead — the form isn't monitored around the clock.
+        </p>
+
+        <form
+          id="booking-form"
+          class="mt-8 space-y-5"
+          method="POST"
+          action={hasEndpoint ? site.formEndpoint : undefined}
+        >
+          <!-- Honeypot: bots fill this, humans never see it -->
+          <div class="absolute left-[-9999px]" aria-hidden="true">
+            <label for="company">Company</label>
+            <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="name" class="block text-sm font-medium text-ink-800"
+                >Your name <span class="text-brass-600">*</span></label
+              >
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                autocomplete="name"
+                class="mt-1.5 w-full rounded-xl border border-ink-200 bg-cream px-4 py-3 text-ink-900 placeholder:text-ink-300 focus:border-brass-400 focus:bg-white"
+                placeholder="Jane Doe"
+              />
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium text-ink-800"
+                >Phone <span class="text-brass-600">*</span></label
+              >
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                required
+                autocomplete="tel"
+                class="mt-1.5 w-full rounded-xl border border-ink-200 bg-cream px-4 py-3 text-ink-900 placeholder:text-ink-300 focus:border-brass-400 focus:bg-white"
+                placeholder="(403) 000-0000"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-ink-800">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              class="mt-1.5 w-full rounded-xl border border-ink-200 bg-cream px-4 py-3 text-ink-900 placeholder:text-ink-300 focus:border-brass-400 focus:bg-white"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="doctype" class="block text-sm font-medium text-ink-800"
+                >Type of document</label
+              >
+              <select
+                id="doctype"
+                name="doctype"
+                class="mt-1.5 w-full rounded-xl border border-ink-200 bg-cream px-4 py-3 text-ink-900 focus:border-brass-400 focus:bg-white"
+              >
+                <option value="">Not sure — please advise</option>
+                {services.map((s) => <option value={s.title}>{s.title}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="area" class="block text-sm font-medium text-ink-800"
+                >Neighbourhood or postal code</label
+              >
+              <input
+                id="area"
+                name="area"
+                type="text"
+                class="mt-1.5 w-full rounded-xl border border-ink-200 bg-cream px-4 py-3 text-ink-900 placeholder:text-ink-300 focus:border-brass-400 focus:bg-white"
+                placeholder="Mahogany / T3M"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="when" class="block text-sm font-medium text-ink-800"
+              >When suits you?</label
+            >
+            <input
+              id="when"
+              name="when"
+              type="text"
+              class="mt-1.5 w-full rounded-xl border border-ink-200 bg-cream px-4 py-3 text-ink-900 placeholder:text-ink-300 focus:border-brass-400 focus:bg-white"
+              placeholder="Weekday evenings, or ASAP"
+            />
+          </div>
+
+          <div>
+            <label for="message" class="block text-sm font-medium text-ink-800"
+              >Anything else Peggy should know?</label
+            >
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              class="mt-1.5 w-full rounded-xl border border-ink-200 bg-cream px-4 py-3 text-ink-900 placeholder:text-ink-300 focus:border-brass-400 focus:bg-white"
+              placeholder="Number of documents, hospital room number, accessibility needs…"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full rounded-full bg-brass-500 px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-brass-600"
+          >
+            Send request
+          </button>
+
+          <p class="text-xs leading-relaxed text-ink-500">
+            Please don't send sensitive personal details or document contents through
+            this form. Submitting it does not create a professional relationship, and
+            nothing on this site is legal advice.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline define:vars={{ email: site.email, hasEndpoint }}>
+  const form = document.getElementById("booking-form");
+
+  form?.addEventListener("submit", (event) => {
+    // Honeypot tripped — silently drop.
+    if (form.company.value) {
+      event.preventDefault();
+      return;
+    }
+
+    // No form backend configured yet: fall back to the visitor's mail client so
+    // requests still reach Peggy. Remove once site.formEndpoint is set.
+    if (!hasEndpoint) {
+      event.preventDefault();
+      const get = (n) => form[n]?.value?.trim() || "—";
+      const body = [
+        `Name: ${get("name")}`,
+        `Phone: ${get("phone")}`,
+        `Email: ${get("email")}`,
+        `Document: ${get("doctype")}`,
+        `Location: ${get("area")}`,
+        `Preferred time: ${get("when")}`,
+        "",
+        `Notes: ${get("message")}`,
+      ].join("\n");
+
+      window.location.href =
+        `mailto:${email}?subject=${encodeURIComponent("Appointment request")}` +
+        `&body=${encodeURIComponent(body)}`;
+    }
+  });
+</script>
