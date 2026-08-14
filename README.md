@@ -19,7 +19,7 @@ No JavaScript framework, no client-side runtime beyond two tiny inline scripts
 Everything business-specific lives in **`src/config/site.ts`**. Nothing is
 hard-coded into the pages, so these are the only edits needed:
 
-- [ ] `phone` and `phoneHref` — currently `(403) 555-0142` (a fictional number)
+- [x] `phone` and `phoneHref` — set to `(403) 813-7933`
 - [ ] `email` — currently `hello@peggycommissioner.ca`
 - [ ] `url` — the real production domain (used for canonical URLs and the sitemap)
 - [ ] `ownerFull` — Peggy's full legal name, used in the structured data

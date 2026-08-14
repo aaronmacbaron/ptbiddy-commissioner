@@ -13,8 +13,8 @@ export const site = {
   url: "https://peggycommissioner.ca",
 
   // TODO: replace with Peggy's real contact details
-  phone: "(403) 555-0142",
-  phoneHref: "+14035550142",
+  phone: "(403) 813-7933",
+  phoneHref: "+14038137933",
   email: "hello@peggycommissioner.ca",
 
   city: "Calgary",
