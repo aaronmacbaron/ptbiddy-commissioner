@@ -77,6 +77,7 @@ export const pricing = {
 export const nav = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services/" },
+  { label: "Pricing", href: "/pricing/" },
   { label: "Service Area", href: "/service-area/" },
   { label: "FAQ", href: "/faq/" },
   { label: "Contact", href: "/contact/" },

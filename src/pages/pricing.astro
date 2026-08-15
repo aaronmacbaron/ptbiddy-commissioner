@@ -1,0 +1,369 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Icon from "../components/Icon.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { site, pricing } from "../config/site";
+import { travelZones } from "../config/estimator";
+import { heroDefault } from "../config/heroImages";
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: new URL("/", site.url).href,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Pricing estimator",
+      item: new URL("/pricing/", site.url).href,
+    },
+  ],
+};
+---
+
+<Layout
+  title="Pricing Estimator"
+  description={`Estimate the cost of a mobile Commissioner for Oaths visit in Calgary. From $${pricing.base} for the first document, $${pricing.perExtraDoc} each after. Enter your documents, location and day for an itemised estimate.`}
+  schema={[breadcrumbSchema]}
+>
+  <PageHero
+    image={heroDefault}
+    eyebrow="Pricing estimator"
+    title="Work out the cost before you call."
+    lead="Every fee Peggy charges is on this page — there is nothing added at the door. Set the three things that affect the price and you'll see the full breakdown."
+  >
+    <Breadcrumbs
+      slot="breadcrumbs"
+      trail={[{ label: "Home", href: "/" }, { label: "Pricing" }]}
+    />
+  </PageHero>
+
+  <section class="container-page py-16 md:py-20">
+    <div class="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start">
+      <!-- Inputs -->
+      <div class="rounded-3xl border border-ink-200/70 bg-white p-8 md:p-10">
+        <h2 class="text-2xl">Your appointment</h2>
+
+        <div class="mt-8 space-y-8">
+          <!-- Documents -->
+          <div>
+            <label for="doc-count" class="block text-sm font-medium text-ink-800">
+              How many documents need commissioning?
+            </label>
+            <p class="mt-1 text-sm text-ink-500">
+              Every document signed at the same visit counts — they don't need to be
+              the same type.
+            </p>
+            <div class="mt-3 flex items-center gap-3">
+              <button
+                type="button"
+                id="doc-minus"
+                aria-label="One fewer document"
+                class="grid size-11 shrink-0 place-items-center rounded-xl border border-ink-200 bg-cream text-xl font-semibold text-ink-800 transition-colors hover:border-brass-400 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                −
+              </button>
+              <input
+                id="doc-count"
+                type="number"
+                min="1"
+                max="20"
+                value="1"
+                inputmode="numeric"
+                class="w-24 rounded-xl border border-ink-200 bg-cream px-4 py-3 text-center font-display text-xl text-ink-900 focus:border-brass-400 focus:bg-white"
+              />
+              <button
+                type="button"
+                id="doc-plus"
+                aria-label="One more document"
+                class="grid size-11 shrink-0 place-items-center rounded-xl border border-ink-200 bg-cream text-xl font-semibold text-ink-800 transition-colors hover:border-brass-400 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div>
+            <label for="zone" class="block text-sm font-medium text-ink-800">
+              Where should Peggy meet you?
+            </label>
+            <p class="mt-1 text-sm text-ink-500">
+              Travel within {pricing.travelIncludedKm} km of downtown is included in
+              the base fee.
+            </p>
+            <select
+              id="zone"
+              class="mt-3 w-full rounded-xl border border-ink-200 bg-cream px-4 py-3 text-ink-900 focus:border-brass-400 focus:bg-white"
+            >
+              {
+                travelZones.map((z) => (
+                  <option value={z.id}>
+                    {z.label} — approx. {z.km} km
+                  </option>
+                ))
+              }
+              <option value="other">Somewhere else / further out</option>
+            </select>
+            <p id="zone-note" class="mt-2 text-sm text-ink-500"></p>
+          </div>
+
+          <!-- Day -->
+          <div>
+            <span class="block text-sm font-medium text-ink-800">Which day?</span>
+            <p class="mt-1 text-sm text-ink-500">
+              Weekday evenings to 10 p.m. are standard hours — no surcharge.
+            </p>
+            <div class="mt-3 grid gap-3 sm:grid-cols-2">
+              <label
+                class="flex cursor-pointer items-start gap-3 rounded-xl border border-ink-200 bg-cream p-4 transition-colors has-[:checked]:border-brass-400 has-[:checked]:bg-white"
+              >
+                <input
+                  type="radio"
+                  name="day"
+                  value="weekday"
+                  checked
+                  class="mt-1 accent-brass-500"
+                />
+                <span>
+                  <span class="block text-sm font-semibold text-ink-900">Weekday</span>
+                  <span class="mt-0.5 block text-xs text-ink-500">
+                    Monday – Friday, 4–10 p.m.
+                  </span>
+                </span>
+              </label>
+              <label
+                class="flex cursor-pointer items-start gap-3 rounded-xl border border-ink-200 bg-cream p-4 transition-colors has-[:checked]:border-brass-400 has-[:checked]:bg-white"
+              >
+                <input
+                  type="radio"
+                  name="day"
+                  value="weekend"
+                  class="mt-1 accent-brass-500"
+                />
+                <span>
+                  <span class="block text-sm font-semibold text-ink-900">
+                    Weekend or stat holiday
+                  </span>
+                  <span class="mt-0.5 block text-xs text-ink-500">
+                    Adds ${pricing.weekendHoliday}
+                  </span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estimate -->
+      <div class="lg:sticky lg:top-28">
+        <div class="rounded-3xl bg-ink-900 p-8 text-ink-200 md:p-10">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brass-300">
+            Your estimate
+          </p>
+
+          <p class="mt-4 flex items-baseline gap-2">
+            <span id="total" class="font-display text-6xl text-white">${pricing.base}</span>
+            <span class="text-sm text-ink-400">CAD, all in</span>
+          </p>
+
+          <dl id="breakdown" class="mt-8 space-y-3 border-t border-white/10 pt-6 text-sm">
+          </dl>
+
+          <p
+            id="out-of-area"
+            class="mt-6 hidden rounded-xl bg-brass-500/15 p-4 text-sm leading-relaxed text-brass-200"
+          >
+            Further out than Strathmore, Peggy quotes trips individually — some she
+            can take, some she can't. Phone and describe where you are.
+          </p>
+
+          <div class="mt-8 flex flex-col gap-3">
+            <a
+              href={`tel:${site.phoneHref}`}
+              class="inline-flex items-center justify-center gap-2.5 rounded-full bg-brass-500 px-7 py-4 text-base font-semibold text-white transition-colors hover:bg-brass-600"
+            >
+              <Icon name="phone" class="size-5" />
+              <span class="whitespace-nowrap">Call or text {site.phone}</span>
+            </a>
+            <a
+              href="/contact/"
+              class="inline-flex items-center justify-center gap-2.5 rounded-full border border-white/25 px-7 py-4 text-base font-semibold text-white transition-colors hover:border-white/50"
+            >
+              Request this appointment
+              <Icon name="chevron" class="size-4" />
+            </a>
+          </div>
+        </div>
+
+        <p class="mt-6 text-sm leading-relaxed text-ink-500">
+          This is an estimate, not a quote. Peggy confirms the full amount before she
+          sets out — and if she happens to be near you already, she'll often waive the
+          travel portion. Nothing is added after the appointment.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's included -->
+  <section class="border-y border-ink-100 bg-parchment/60 py-16 md:py-20">
+    <div class="container-page">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brass-600">
+        No surprises
+      </p>
+      <h2 class="mt-3 max-w-2xl text-3xl md:text-4xl">
+        What the fee already covers.
+      </h2>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {
+          [
+            {
+              icon: "check",
+              title: "The travel itself",
+              body: `Anywhere within ${pricing.travelIncludedKm} km of downtown Calgary, there is no travel charge at all — it's in the base fee.`,
+            },
+            {
+              icon: "clock",
+              title: "The time it takes",
+              body: "A typical visit runs about fifteen minutes. Peggy doesn't bill by the hour, so a slower appointment costs the same.",
+            },
+            {
+              icon: "shield",
+              title: "Identity checks & the jurat",
+              body: "Confirming your ID, administering the oath and completing the jurat are all part of commissioning — never extras.",
+            },
+          ].map((item) => (
+            <div class="rounded-2xl border border-ink-200/70 bg-white p-7">
+              <span class="grid size-11 place-items-center rounded-xl bg-brass-50 text-brass-700">
+                <Icon name={item.icon} class="size-5" />
+              </span>
+              <h3 class="mt-5 font-display text-xl text-ink-900">{item.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="mt-10 max-w-3xl text-sm leading-relaxed text-ink-500">
+        Distances are measured from downtown Calgary rather than from wherever Peggy
+        happens to be, so the number you see here is the number you can check
+        yourself. Not sure your document needs a commissioner at all? That
+        conversation is free —{" "}
+        <a href="/faq/" class="font-semibold text-brass-700 underline">read the FAQ</a
+        > or call and describe the form.
+      </p>
+    </div>
+  </section>
+
+  <CtaBand />
+</Layout>
+
+<script
+  is:inline
+  define:vars={{
+    base: pricing.base,
+    perExtraDoc: pricing.perExtraDoc,
+    weekendHoliday: pricing.weekendHoliday,
+    includedKm: pricing.travelIncludedKm,
+    perKm: pricing.travelPerKm,
+    zones: travelZones,
+  }}
+>
+  const docInput = document.getElementById("doc-count");
+  const minus = document.getElementById("doc-minus");
+  const plus = document.getElementById("doc-plus");
+  const zoneSelect = document.getElementById("zone");
+  const zoneNote = document.getElementById("zone-note");
+  const totalEl = document.getElementById("total");
+  const breakdownEl = document.getElementById("breakdown");
+  const outOfArea = document.getElementById("out-of-area");
+
+  const MAX_DOCS = 20;
+  const money = (n) => "$" + n.toFixed(0);
+
+  const row = (label, amount, muted) => `
+    <div class="flex justify-between gap-4">
+      <dt class="${muted ? "text-ink-400" : "text-ink-300"}">${label}</dt>
+      <dd class="shrink-0 font-medium ${muted ? "text-ink-400" : "text-white"}">${amount}</dd>
+    </div>`;
+
+  function calculate() {
+    let docs = parseInt(docInput.value, 10);
+    if (!Number.isFinite(docs) || docs < 1) docs = 1;
+    if (docs > MAX_DOCS) docs = MAX_DOCS;
+
+    const zone = zones.find((z) => z.id === zoneSelect.value);
+    const isWeekend =
+      document.querySelector('input[name="day"]:checked').value === "weekend";
+
+    const rows = [];
+    let total = base;
+    rows.push(row("First document", money(base)));
+
+    const extras = docs - 1;
+    if (extras > 0) {
+      const extraCost = extras * perExtraDoc;
+      total += extraCost;
+      rows.push(
+        row(
+          `${extras} more document${extras > 1 ? "s" : ""} × ${money(perExtraDoc)}`,
+          money(extraCost),
+        ),
+      );
+    }
+
+    if (zone) {
+      const over = Math.max(0, zone.km - includedKm);
+      if (over > 0) {
+        const travel = over * perKm;
+        total += travel;
+        rows.push(row(`Travel — ${over} km beyond ${includedKm} km`, money(travel)));
+      } else {
+        rows.push(row("Travel — within the included radius", "Included", true));
+      }
+    }
+
+    if (isWeekend) {
+      total += weekendHoliday;
+      rows.push(row("Weekend or statutory holiday", money(weekendHoliday)));
+    }
+
+    // "Somewhere else" can't be priced — show the floor and say so.
+    const unpriced = !zone;
+    outOfArea.classList.toggle("hidden", !unpriced);
+    zoneNote.textContent = zone ? zone.note : "";
+
+    totalEl.textContent = unpriced ? money(total) + "+" : money(total);
+    breakdownEl.innerHTML = rows.join("");
+
+    minus.disabled = docs <= 1;
+    plus.disabled = docs >= MAX_DOCS;
+    docInput.value = String(docs);
+  }
+
+  minus.addEventListener("click", () => {
+    docInput.value = String(Math.max(1, (parseInt(docInput.value, 10) || 1) - 1));
+    calculate();
+  });
+  plus.addEventListener("click", () => {
+    docInput.value = String(
+      Math.min(MAX_DOCS, (parseInt(docInput.value, 10) || 1) + 1),
+    );
+    calculate();
+  });
+  docInput.addEventListener("input", calculate);
+  zoneSelect.addEventListener("change", calculate);
+  document
+    .querySelectorAll('input[name="day"]')
+    .forEach((el) => el.addEventListener("change", calculate));
+
+  calculate();
+</script>

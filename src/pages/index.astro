@@ -7,7 +7,7 @@ import FaqList from "../components/FaqList.astro";
 import { site, pricing } from "../config/site";
 import { steps, cannotDo, faqs, areas } from "../config/content";
 import { services } from "../config/services";
-import { heroHome } from "../config/heroImages";
+import { heroHome, calgaryTower } from "../config/heroImages";
 
 const homeFaqs = faqs.slice(0, 6);
 
@@ -270,7 +270,23 @@ const highlights = [
   </section>
 
   <!-- Scope honesty section -->
-  <section class="border-y border-ink-100 bg-ink-50/60 py-20">
+  <section class="relative isolate overflow-hidden border-y border-ink-100 bg-ink-50/60 py-20">
+    <Image
+      src={calgaryTower}
+      alt=""
+      width={2000}
+      widths={[640, 1024, 1600, 2000]}
+      sizes="100vw"
+      quality={72}
+      loading="lazy"
+      class="absolute inset-0 -z-20 size-full object-cover object-[50%_38%]"
+    />
+    <div
+      class="absolute inset-0 -z-10 bg-parchment/45 bg-gradient-to-r from-parchment via-parchment/88 to-parchment/40"
+      aria-hidden="true"
+    >
+    </div>
+
     <div class="container-page grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brass-600">

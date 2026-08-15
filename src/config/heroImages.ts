@@ -9,6 +9,7 @@
  * import below, and the pages using it pick it up on the next build.
  */
 
+import calgaryTowerImg from "../assets/heroes/calgary-with-tower.jpg";
 import careHome from "../assets/heroes/care-home.jpg";
 import childTravel from "../assets/heroes/child-travel.jpg";
 import defaultHero from "../assets/heroes/default-hero.jpg";
@@ -21,6 +22,13 @@ export const heroDefault = defaultHero;
 
 /** Home page only — its hero is bespoke markup rather than <PageHero>. */
 export const heroHome = homeHeader;
+
+/**
+ * Downtown skyline, used behind the "what a commissioner can't do" band on the
+ * home page. It's a portrait shot (4000×6000), so anywhere it appears in a wide
+ * band it needs an explicit focal point or the towers crop out of frame.
+ */
+export const calgaryTower = calgaryTowerImg;
 
 /**
  * Per-service heroes, keyed by service slug. Travel consent and the mobile
