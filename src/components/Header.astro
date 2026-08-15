@@ -1,7 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import { site, nav } from "../config/site";
 import { services } from "../config/services";
 import Icon from "./Icon.astro";
+import logoMark from "../assets/logo-mark.png";
 
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
@@ -11,10 +13,14 @@ const isActive = (href: string) =>
 <header class="sticky top-0 z-40 border-b border-ink-100 bg-cream/90 backdrop-blur-md">
   <div class="container-page flex h-16 items-center justify-between gap-4 md:h-20">
     <a href="/" class="group flex items-center gap-3">
-      <span
-        class="grid size-10 shrink-0 place-items-center rounded-full bg-ink-800 font-display text-[0.7rem] font-semibold tracking-[0.06em] text-brass-300 transition-colors group-hover:bg-ink-900"
-        aria-hidden="true">MKO</span
-      >
+      <Image
+        src={logoMark}
+        alt=""
+        width={80}
+        densities={[1, 2]}
+        loading="eager"
+        class="size-10 shrink-0 rounded-xl object-cover"
+      />
       <span class="leading-tight">
         <span class="block font-display text-lg font-semibold text-ink-900 md:text-xl"
           >{site.name}</span

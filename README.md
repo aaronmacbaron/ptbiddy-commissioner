@@ -26,7 +26,9 @@ hard-coded into the pages, so these are the only edits needed:
       `owner` stays `"Peggy"` — her shorthand, and what the site copy uses.
 - [ ] `hours` — **still placeholder.** Confirm the real availability.
 - [ ] `pricing` — **still placeholder.** Confirm the fee schedule on `/services/`.
-- [ ] `social` — **still placeholder.** Add real profile URLs or leave blank.
+- [ ] `social` — commented out until Margaret creates the accounts. Nothing
+      renders them today; when they exist, uncomment the block and add the URLs
+      to `sameAs` in the schema in `Layout.astro`.
 
 > The scaffold shipped with invented business details. Everything above marked
 > `[ ]` is fiction until someone checks it against what Margaret actually does.

@@ -49,20 +49,11 @@ const businessSchema = {
     },
     geoRadius: site.serviceRadiusKm * 1000,
   },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "08:00",
-      closes: "20:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Saturday"],
-      opens: "09:00",
-      closes: "18:00",
-    },
-  ],
+  // Derived from site.hours so the schema can't drift from the published times.
+  openingHoursSpecification: site.hours
+    .map((h) => h.schema)
+    .filter((s) => s !== null)
+    .map((s) => ({ "@type": "OpeningHoursSpecification", ...s })),
 };
 ---
 
@@ -86,7 +77,9 @@ const businessSchema = {
     <meta property="og:locale" content="en_CA" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32 16x16" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <script

@@ -69,7 +69,7 @@ export const faqs = [
   },
   {
     q: "How much does it cost?",
-    a: `A standard visit within Calgary is $${pricing.base} for the first document and $${pricing.perExtraDoc} for each additional document signed at the same appointment. Evenings, weekends, statutory holidays and urgent same-day requests add $${pricing.afterHours}. Travel beyond ${pricing.travelIncludedKm} km from downtown Calgary is $${pricing.travelPerKm}/km. You'll be told the full amount before Peggy leaves — never after.`,
+    a: `A standard visit within Calgary is $${pricing.base} for the first document and $${pricing.perExtraDoc} for each additional document signed at the same appointment. Weekend and statutory holiday appointments add $${pricing.weekendHoliday} — weekday evenings up to 10 p.m. are standard hours, with no surcharge. Travel beyond ${pricing.travelIncludedKm} km from downtown Calgary is $${pricing.travelPerKm}/km. You'll be told the full amount before Peggy leaves — never after.`,
   },
   {
     q: "How quickly can you get to me?",

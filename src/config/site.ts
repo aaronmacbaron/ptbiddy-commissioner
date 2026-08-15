@@ -9,7 +9,7 @@ export const site = {
   legalName: "MKO Services",
   owner: "Peggy",
   ownerFull: "Margaret Bidochka",
-  tagline: "A mobile Commissioner for Oaths who comes to you — anywhere in Calgary.",
+  tagline: "A mobile Commissioner for Oaths who comes to you — anywhere in Calgary and surrounding areas.",
   url: "https://mko-services.ca",
 
   phone: "(403) 813-7933",
@@ -24,25 +24,52 @@ export const site = {
   serviceRadiusKm: 40,
   geo: { lat: 51.0447, lng: -114.0719 },
 
+  /**
+   * `time` is what visitors read; `schema` is the machine-readable equivalent
+   * used for the opening hours in the LegalService structured data. Keep the
+   * two in step — `schema: null` means "no fixed hours" and is left out of the
+   * schema entirely, which is the correct signal for appointment-only days.
+   */
   hours: [
-    { days: "Monday – Friday", time: "8:00 a.m. – 8:00 p.m." },
-    { days: "Saturday", time: "9:00 a.m. – 6:00 p.m." },
-    { days: "Sunday", time: "By appointment" },
+    {
+      days: "Monday – Friday",
+      time: "4:00 p.m. – 10:00 p.m.",
+      schema: {
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "16:00",
+        closes: "22:00",
+      },
+    },
+    {
+      days: "Saturday",
+      time: "9:00 a.m. – 6:00 p.m.",
+      schema: {
+        dayOfWeek: ["Saturday"],
+        opens: "09:00",
+        closes: "18:00",
+      },
+    },
+    { days: "Sunday", time: "By appointment", schema: null },
   ],
 
-  social: {
-    // TODO: add real profiles, or delete the entries you don't use
-    facebook: "",
-    linkedin: "",
-    google: "",
-  },
+  // Social profiles are hidden until Margaret has set the accounts up. Nothing
+  // on the site renders them yet — when they exist, uncomment and add them to
+  // `sameAs` in the LegalService schema in Layout.astro, which is where they
+  // actually earn their keep for search.
+  // social: {
+  //   facebook: "",
+  //   linkedin: "",
+  //   google: "",
+  // },
 
 } as const;
 
 export const pricing = {
-  base: 45,
+  base: 30,
   perExtraDoc: 10,
-  afterHours: 25,
+  // Weekends and statutory holidays. Weekday evenings to 10 p.m. are standard
+  // hours, not a surcharge.
+  weekendHoliday: 25,
   travelIncludedKm: 25,
   travelPerKm: 1,
 } as const;

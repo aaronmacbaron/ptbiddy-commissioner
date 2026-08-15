@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
 import CtaBand from "../components/CtaBand.astro";
@@ -6,6 +7,7 @@ import FaqList from "../components/FaqList.astro";
 import { site, pricing } from "../config/site";
 import { steps, cannotDo, faqs, areas } from "../config/content";
 import { services } from "../config/services";
+import { heroHome } from "../config/heroImages";
 
 const homeFaqs = faqs.slice(0, 6);
 
@@ -27,8 +29,8 @@ const highlights = [
   },
   {
     icon: "clock",
-    title: "Evenings & weekends",
-    body: "Appointments outside business hours are the norm here, not a favour. Same-day is usually available.",
+    title: "Open until 10 p.m.",
+    body: "Weekday appointments run to 10 p.m., so you don't have to take time off work. Same-day is usually available.",
   },
   {
     icon: "shield",
@@ -44,9 +46,30 @@ const highlights = [
   schema={[faqSchema]}
 >
   <!-- Hero -->
-  <section class="relative overflow-hidden border-b border-ink-100 bg-parchment">
+  <section
+    class="relative isolate overflow-hidden border-b border-ink-100 bg-parchment"
+  >
+    <Image
+      src={heroHome}
+      alt=""
+      width={2000}
+      widths={[640, 1024, 1600, 2000]}
+      sizes="100vw"
+      quality={72}
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 -z-20 size-full object-cover"
+    />
+
+    <!-- Existing brass glow sits under the scrim so the photo stays readable -->
     <div
-      class="pointer-events-none absolute -right-40 top-[-10rem] size-[36rem] rounded-full bg-brass-200/35 blur-3xl"
+      class="pointer-events-none absolute -right-40 top-[-10rem] -z-10 size-[36rem] rounded-full bg-brass-200/35 blur-3xl"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div
+      class="absolute inset-0 -z-10 bg-parchment/40 bg-gradient-to-r from-parchment via-parchment/88 to-parchment/35"
       aria-hidden="true"
     >
     </div>

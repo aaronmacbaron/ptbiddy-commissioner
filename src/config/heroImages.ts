@@ -12,11 +12,15 @@
 import careHome from "../assets/heroes/care-home.jpg";
 import childTravel from "../assets/heroes/child-travel.jpg";
 import defaultHero from "../assets/heroes/default-hero.jpg";
+import homeHeader from "../assets/heroes/home-header.jpg";
 import signature from "../assets/heroes/signature.jpg";
 import signature2 from "../assets/heroes/signature-2.jpg";
 
 /** Used by every page without a more specific image. Placeholder — to be replaced. */
 export const heroDefault = defaultHero;
+
+/** Home page only — its hero is bespoke markup rather than <PageHero>. */
+export const heroHome = homeHeader;
 
 /**
  * Per-service heroes, keyed by service slug. Travel consent and the mobile
