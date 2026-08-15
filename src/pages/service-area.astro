@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import { heroDefault } from "../config/heroImages";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import CtaBand from "../components/CtaBand.astro";
 import Icon from "../components/Icon.astro";
@@ -13,6 +14,7 @@ import { areas, facilities } from "../config/content";
   description={`Mobile Commissioner for Oaths covering all of Calgary — NW, NE, SW, SE and downtown — plus Airdrie, Chestermere, Cochrane, Okotoks and Strathmore. Hospital and care-home visits available.`}
 >
   <PageHero
+    image={heroDefault}
     eyebrow="Service area"
     title="Across Calgary, and out to the towns that ring it."
     lead={`Peggy travels to clients throughout Calgary and up to roughly ${site.serviceRadiusKm} km beyond it. Travel within ${pricing.travelIncludedKm} km of downtown is included in the base fee; anything further is quoted before she sets out.`}

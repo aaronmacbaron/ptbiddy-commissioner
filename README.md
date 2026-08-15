@@ -50,6 +50,34 @@ Each service page carries its own `Service`, `BreadcrumbList` and `FAQPage`
 structured data, so the `metaDescription`, `intro` and `faqs` fields are worth
 writing properly — near-duplicate pages rank worse than a single combined one.
 
+### Hero images
+
+Hero photos live in **`src/assets/heroes/`**, not `public/`. That matters: Astro
+only optimizes images under `src/`. Files in `public/` are served byte-for-byte,
+and these originals are 2–4 MB each. Built through `src/`, all five images
+across every responsive size total under 1 MB.
+
+The mapping lives in `src/config/heroImages.ts`:
+
+| Page | Image |
+| --- | --- |
+| Home | *none — deliberate* |
+| Contact, FAQ, Service area, Services hub | `default-hero.jpg` (placeholder) |
+| `/services/travel-consent/` | `child-travel.jpg` |
+| `/services/mobile-visits/` | `care-home.jpg` |
+| Affidavits, Oaths & Affirmations | `signature.jpg` |
+| Statutory Declarations, Witnessing | `signature-2.jpg` |
+
+To swap one: drop the file in `src/assets/heroes/`, update the import at the top
+of `src/config/heroImages.ts`, rebuild. To give a service its own photo, add a
+line to the `serviceHeroes` map keyed by slug — anything not listed falls back
+to the default.
+
+Heroes render as an `<Image>` behind a parchment scrim rather than a CSS
+`background-image`, so they get WebP conversion, a `srcset` and `fetchpriority`
+that a CSS background can't. The scrim gradient is in `PageHero.astro`; lighten
+`to-parchment/35` to show more of the photo, darken it if text contrast suffers.
+
 ### Contact form
 
 The form on `/contact/` uses [Netlify Forms](https://docs.netlify.com/manage/forms/setup/).

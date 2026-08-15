@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import { heroDefault } from "../config/heroImages";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Icon from "../components/Icon.astro";
 import { site } from "../config/site";
@@ -16,6 +17,7 @@ const formName = "booking";
   description={`Book a mobile Commissioner for Oaths in Calgary. Call or text ${site.phone}, or send an appointment request — evenings, weekends and same-day visits available.`}
 >
   <PageHero
+    image={heroDefault}
     eyebrow="Book a visit"
     title="Call, text, or send the details — whichever is easier."
     lead="For anything urgent, phone. Peggy answers her own line, and you'll know within a minute whether she can help and when she can be there."

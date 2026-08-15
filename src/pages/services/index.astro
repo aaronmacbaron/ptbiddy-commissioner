@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
+import { heroDefault } from "../../config/heroImages";
 import CtaBand from "../../components/CtaBand.astro";
 import Icon from "../../components/Icon.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
@@ -50,6 +51,7 @@ const itemListSchema = {
   schema={[itemListSchema]}
 >
   <PageHero
+    image={heroDefault}
     eyebrow="Services & fees"
     title="Everything a Commissioner for Oaths can do — brought to wherever you are."
     lead="Peggy administers oaths and affirmations, takes affidavits, and takes statutory declarations under Alberta's Notaries and Commissioners Act. Pick the one that matches your document for the full detail, or call and describe the form."

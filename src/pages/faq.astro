@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import { heroDefault } from "../config/heroImages";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import CtaBand from "../components/CtaBand.astro";
 import FaqList from "../components/FaqList.astro";
@@ -35,6 +36,7 @@ const comparison = [
   schema={[faqSchema]}
 >
   <PageHero
+    image={heroDefault}
     eyebrow="FAQ"
     title="The questions Peggy gets asked on the phone every week."
     lead="If yours isn't here, call and ask. It's a two-minute conversation that regularly saves people a wasted trip to the wrong professional."
