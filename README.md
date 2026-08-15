@@ -48,15 +48,22 @@ writing properly — near-duplicate pages rank worse than a single combined one.
 
 ### Contact form
 
-`site.formEndpoint` is empty, so the form on `/contact/` currently falls back to
-opening the visitor's email client with the fields pre-filled. That works, but
-it's a weaker conversion path than a real backend.
+The form on `/contact/` uses [Netlify Forms](https://docs.netlify.com/manage/forms/setup/).
+It posts `name`/`phone`/`email`/`doctype`/`area`/`when`/`message` plus a
+`company` honeypot to the site root, then swaps itself for an inline
+confirmation. No API keys and no config — the form is named `booking`, and
+Netlify picks it up by parsing the prerendered HTML at deploy time.
 
-To wire up a real one, create an endpoint with [Web3Forms](https://web3forms.com),
-[Formspree](https://formspree.io) or Netlify Forms and paste the URL into
-`site.formEndpoint`. The form posts standard `name`/`phone`/`email`/`doctype`/
-`area`/`when`/`message` fields plus a `company` honeypot, and the JS fallback
-disables itself automatically once the endpoint is set.
+Two consequences of that build-time detection:
+
+- The form only appears in the Netlify dashboard **after a successful deploy**.
+  It won't exist before the first one.
+- Submissions only work on Netlify. Locally, and on any other host, the POST
+  will 404 and the visitor sees the "please phone instead" error state.
+
+After the first deploy, set up **Forms → booking → Form notifications → Email
+notification** in the Netlify dashboard so Peggy is emailed each request.
+The free tier covers 100 submissions/month, and spam counts toward it.
 
 ## Deploying
 

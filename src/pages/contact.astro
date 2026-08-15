@@ -6,7 +6,9 @@ import Icon from "../components/Icon.astro";
 import { site } from "../config/site";
 import { services } from "../config/services";
 
-const hasEndpoint = site.formEndpoint.length > 0;
+// Netlify detects this form by parsing the prerendered HTML at deploy time, so
+// the name here must match the form listed in the Netlify dashboard.
+const formName = "booking";
 ---
 
 <Layout
@@ -111,8 +113,13 @@ const hasEndpoint = site.formEndpoint.length > 0;
           id="booking-form"
           class="mt-8 space-y-5"
           method="POST"
-          action={hasEndpoint ? site.formEndpoint : undefined}
+          name={formName}
+          data-netlify="true"
+          data-netlify-honeypot="company"
         >
+          <!-- Required by Netlify to route the submission to the right form -->
+          <input type="hidden" name="form-name" value={formName} />
+
           <!-- Honeypot: bots fill this, humans never see it -->
           <div class="absolute left-[-9999px]" aria-hidden="true">
             <label for="company">Company</label>
@@ -217,11 +224,23 @@ const hasEndpoint = site.formEndpoint.length > 0;
           </div>
 
           <button
+            id="booking-submit"
             type="submit"
-            class="w-full rounded-full bg-brass-500 px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-brass-600"
+            class="w-full rounded-full bg-brass-500 px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-brass-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
             Send request
           </button>
+
+          <p
+            id="booking-error"
+            class="hidden rounded-xl bg-red-50 px-4 py-3 text-sm leading-relaxed text-red-800"
+            role="alert"
+          >
+            Sorry — that didn't send. Please phone or text
+            <a href={`tel:${site.phoneHref}`} class="font-semibold underline"
+              >{site.phone}</a
+            > and Peggy will sort it out.
+          </p>
 
           <p class="text-xs leading-relaxed text-ink-500">
             Please don't send sensitive personal details or document contents through
@@ -229,40 +248,63 @@ const hasEndpoint = site.formEndpoint.length > 0;
             nothing on this site is legal advice.
           </p>
         </form>
+
+        <!-- Swapped in for the form once a request goes through -->
+        <div id="booking-success" class="mt-8 hidden" role="status">
+          <div class="rounded-2xl border border-brass-200 bg-brass-50 p-6">
+            <h3 class="text-xl">Request sent.</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-600">
+              Peggy has your details and will be in touch shortly to confirm a time.
+              If it's urgent, phone or text
+              <a href={`tel:${site.phoneHref}`} class="font-semibold text-brass-700 underline"
+                >{site.phone}</a
+              > rather than waiting on a reply.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </Layout>
 
-<script is:inline define:vars={{ email: site.email, hasEndpoint }}>
+<script is:inline>
   const form = document.getElementById("booking-form");
+  const button = document.getElementById("booking-submit");
+  const errorNote = document.getElementById("booking-error");
+  const success = document.getElementById("booking-success");
 
-  form?.addEventListener("submit", (event) => {
-    // Honeypot tripped — silently drop.
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Honeypot tripped — bots get the success state, Peggy gets nothing.
     if (form.company.value) {
-      event.preventDefault();
+      form.classList.add("hidden");
+      success.classList.remove("hidden");
       return;
     }
 
-    // No form backend configured yet: fall back to the visitor's mail client so
-    // requests still reach Peggy. Remove once site.formEndpoint is set.
-    if (!hasEndpoint) {
-      event.preventDefault();
-      const get = (n) => form[n]?.value?.trim() || "—";
-      const body = [
-        `Name: ${get("name")}`,
-        `Phone: ${get("phone")}`,
-        `Email: ${get("email")}`,
-        `Document: ${get("doctype")}`,
-        `Location: ${get("area")}`,
-        `Preferred time: ${get("when")}`,
-        "",
-        `Notes: ${get("message")}`,
-      ].join("\n");
+    errorNote.classList.add("hidden");
+    button.disabled = true;
+    button.textContent = "Sending…";
 
-      window.location.href =
-        `mailto:${email}?subject=${encodeURIComponent("Appointment request")}` +
-        `&body=${encodeURIComponent(body)}`;
+    try {
+      // Netlify accepts the submission at the site root, same origin, so a
+      // failure is a real HTTP error we can surface rather than guess at.
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(new FormData(form)).toString(),
+      });
+
+      if (!response.ok) throw new Error(`Netlify returned ${response.status}`);
+
+      form.classList.add("hidden");
+      success.classList.remove("hidden");
+      success.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch {
+      errorNote.classList.remove("hidden");
+      button.disabled = false;
+      button.textContent = "Send request";
     }
   });
 </script>

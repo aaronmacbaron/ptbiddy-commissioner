@@ -39,9 +39,6 @@ export const site = {
     google: "",
   },
 
-  // TODO: create a form endpoint (Web3Forms, Formspree, Netlify Forms…) and paste it here.
-  // Until then the contact form falls back to opening the visitor's email client.
-  formEndpoint: "",
 } as const;
 
 export const pricing = {
