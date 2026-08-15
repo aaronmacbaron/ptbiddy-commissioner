@@ -1,18 +1,17 @@
 /**
  * Single source of truth for business details.
- * Swap these values for Peggy's real info — every page reads from here.
+ * Every page reads from here. "Peggy" is Margaret's shorthand and is what the
+ * site copy calls her throughout — `owner` is deliberately the informal name.
  */
 
 export const site = {
-  name: "Peggy Mobile Commissioner",
-  legalName: "Peggy Mobile Commissioner for Oaths",
+  name: "MKO Services",
+  legalName: "MKO Services",
   owner: "Peggy",
-  ownerFull: "Peggy Mitchell",
+  ownerFull: "Margaret Bidochka",
   tagline: "A mobile Commissioner for Oaths who comes to you — anywhere in Calgary.",
-  // TODO: replace with the real production domain before launch
-  url: "https://peggycommissioner.ca",
+  url: "https://mko-services.ca",
 
-  // TODO: replace with Peggy's real contact details
   phone: "(403) 813-7933",
   phoneHref: "+14038137933",
 

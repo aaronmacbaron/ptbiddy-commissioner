@@ -20,11 +20,16 @@ Everything business-specific lives in **`src/config/site.ts`**. Nothing is
 hard-coded into the pages, so these are the only edits needed:
 
 - [x] `phone` and `phoneHref` — set to `(403) 813-7933`
-- [ ] `url` — the real production domain (used for canonical URLs and the sitemap)
-- [ ] `ownerFull` — Peggy's full legal name, used in the structured data
-- [ ] `hours` — confirm the real availability
-- [ ] `pricing` — confirm the fee schedule shown on `/services/`
-- [ ] `social` — add real profile URLs or leave blank
+- [x] `url` — set to `https://mko-services.ca` (canonical URLs and the sitemap)
+- [x] `name` / `legalName` — set to `MKO Services`
+- [x] `ownerFull` — set to `Margaret Bidochka` (used in the structured data).
+      `owner` stays `"Peggy"` — her shorthand, and what the site copy uses.
+- [ ] `hours` — **still placeholder.** Confirm the real availability.
+- [ ] `pricing` — **still placeholder.** Confirm the fee schedule on `/services/`.
+- [ ] `social` — **still placeholder.** Add real profile URLs or leave blank.
+
+> The scaffold shipped with invented business details. Everything above marked
+> `[ ]` is fiction until someone checks it against what Margaret actually does.
 
 Page copy lives in two files:
 
